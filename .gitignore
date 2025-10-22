@@ -1,1 +1,3 @@
-.DS_Store
+/CROSS-implementation/*
+/.vscode/*
+.DS_STORE
