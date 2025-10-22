@@ -2,173 +2,156 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "CROSS-implementation/Reference_Implementation/include/fips202.h"  
+#include "CROSS-implementation/Reference_Implementation/include/fips202.h"
 
-typedef struct {
-    unsigned char **data;  // array di puntatori a seed
-    int size;              
-    int capacity;         
+#define SEED_LENGTH 5
+
+#define TREE_LEVELS 4 // TODO change it to dinamic array
+
+//[DATA STRUCTURES]
+
+// saves the tree path across different function calls
+typedef struct
+{
+    unsigned char data[TREE_LEVELS][SEED_LENGTH]; // array of seeds
+    int levels[TREE_LEVELS];                      // array of levels, to memorize the seed's height
+    int top;
 } SeedStack;
 
-typedef struct {
+// saves the tree state across different function calls
+typedef struct
+{
     SeedStack stack;
-    int stackTop;
     unsigned char *seed;
-    int seedSize;
     int *bitmask;
     int bitmaskSize;
-    int level;
 } TreeData;
 
-// Genera due seed figli da un seed padre
-void RNG(unsigned char *out, const unsigned char *seed, const TreeData *tree) {
-    // genera un buffer di 2 * seedSize byte
-    shake256(out, 2 * tree->seedSize, seed, tree->seedSize);
-    
-}
+//[UTILITY FUNCTIONS]
 
-// Copia in output la prima meta' del seed (figlio sinistro)
-void leftSeed(const unsigned char *input, unsigned char *output, const TreeData *tree) {
-    memcpy(output, input, tree->seedSize);
-}
-
-// Copia in output la seconda meta' del seed (figlio destro)
-void rightSeed(const unsigned char *input, unsigned char *output, const TreeData *tree) {
-    memcpy(output, input + tree->seedSize, tree->seedSize);
-}
-
-void initStack(SeedStack *s) {
-    s->capacity = 4;
-    s->size = 0;
-    s->data = malloc(s->capacity * sizeof(unsigned char *));
-}
-
-void freeStack(SeedStack *s) {
-    for (int i = 0; i < s->size; i++) {
-        free(s->data[i]);
+// debug, given the seed x returns [2x+1, 2x+2]
+void stub_shake(unsigned char *out, const unsigned char *seed)
+{
+    unsigned char output[2 * SEED_LENGTH];
+    for (int i = 0; i < SEED_LENGTH; i++)
+    {
+        output[i] = 2 * seed[i] + 1;
+        output[i + SEED_LENGTH] = 2 * seed[i] + 2;
     }
-    free(s->data);
+
+    memcpy(out, output, SEED_LENGTH * 2);
 }
 
-void push(SeedStack *s, const unsigned char *seed, int seedSize) {
-    if (s->size >= s->capacity) {
-        s->capacity *= 2;
-        s->data = realloc(s->data, s->capacity * sizeof(unsigned char *));
-    }
-    s->data[s->size] = malloc(seedSize);
-    memcpy(s->data[s->size], seed, seedSize);
-    s->size++;
+// returns a seed with double the size of the parent seed
+void RNG(unsigned char *out, const unsigned char *seed)
+{
+    // shake256(out, 2 * SEED_LENGTH, seed, SEED_LENGTH); //TODO change to default shake once ready
+    stub_shake(out, seed);
 }
 
-unsigned char *pop(SeedStack *s) {
-    if (s->size == 0)
+// copies the left half of the parent seed
+void leftSeed(unsigned char *output, const unsigned char *input)
+{
+    memcpy(output, input, SEED_LENGTH);
+}
+
+// copies the second half of the parent seed
+void rightSeed(unsigned char *output, const unsigned char *input)
+{
+    memcpy(output, input + SEED_LENGTH, SEED_LENGTH);
+}
+
+void push(SeedStack *s, const unsigned char *seed, const int seedLevel)
+{
+    s->top++;
+    memcpy(s->data[s->top], seed, SEED_LENGTH);
+    s->levels[s->top] = seedLevel;
+}
+
+unsigned char *pop(SeedStack *s)
+{
+    if (s->top == -1)
         return NULL;
-    s->size--;
-    return s->data[s->size];
+    s->top--;
+    return s->data[s->top + 1];
 }
 
-
-TreeData INIT(TreeData tree, const unsigned char *seed, int seedSize, int *bitmask, int bitmaskSize) {
-    initStack(&tree.stack);
-
-    tree.seedSize = seedSize;
-    tree.seed = malloc(seedSize);
-    memcpy(tree.seed, seed, seedSize);
-
+TreeData INIT(unsigned char *seed, int *bitmask, int bitmask_size)
+{
+    TreeData tree;
+    tree.stack.top = -1;
+    tree.seed = seed;
     tree.bitmask = bitmask;
-    tree.bitmaskSize = bitmaskSize;
-    tree.level = 0;
+    tree.bitmaskSize = bitmask_size;
+
     return tree;
 }
 
-void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height) {
-    int numSeeds = tree->bitmaskSize; // / sizeof(tree->bitmask[0]);
+void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height)
+{
+    int numSeeds = tree->bitmaskSize;
     int height = (int)ceil(log2(numSeeds));
 
-    unsigned char *currentSeed = malloc(tree->seedSize);
-    memcpy(currentSeed, seed, tree->seedSize);
+    unsigned char currentSeed[SEED_LENGTH];
+    memcpy(currentSeed, seed, SEED_LENGTH);
 
-
-    while (temp_height < height) {
-        push(&tree->stack, currentSeed, tree->seedSize);
-
-        // ----------
-        printf("Livello %d: ", temp_height);
-        for (int i = 0; i < tree->seedSize; i++) {
-            printf("%02x", currentSeed[i]);
-        }
-        printf("\n");
-        // ----------
+    while (temp_height < height)
+    {
+        push(&tree->stack, currentSeed, temp_height);
 
         temp_height++;
 
-        unsigned char *children = malloc(2 * tree->seedSize);
-        RNG(children, currentSeed, tree); 
- 
-        unsigned char *left = malloc(tree->seedSize);
-        leftSeed(children, left, tree);
+        unsigned char children[2 * SEED_LENGTH];
+        RNG(children, currentSeed);
 
-        memcpy(currentSeed, left, tree->seedSize);
+        unsigned char left[SEED_LENGTH];
+        leftSeed(left, children);
 
-        free(children);
-        free(left);
+        memcpy(currentSeed, left, SEED_LENGTH);
     }
-    tree->level = temp_height;   
 
-    printf("Foglie lvl %d: ", tree->level);
-    for (int i = 0; i < tree->seedSize; i++) {
+    // TODO i don't know if it should return the array instead
+    for (int i = 0; i < SEED_LENGTH; i++)
+    {
         printf("%02x", currentSeed[i]);
     }
     printf("\n");
-
-    free(currentSeed);
 }
 
+void nextLeaf(TreeData *tree)
+{
+    // if the stack is empty, start from root
+    if (tree->stack.top < 0)
+    {
+        printLeaf(tree, tree->seed, 0);
+        return;
+    }
 
-void nextLeaf(TreeData *tree) {
+    // else, save the current level, remove the first element from the stack and call printLeaf on its right child
+    int currentLevel = tree->stack.levels[tree->stack.top];
+
     unsigned char *seed = pop(&tree->stack);
-    if(seed != NULL) {
-        printf("pop: ");
-        for (int i = 0; i < tree->seedSize; i++) {
-            printf("%02x", seed[i]);
-        }
-        printf("\n");
+    if (seed == NULL)
+    {
+        printf("ERROR: Stack is empty but top is %d", tree->stack.top);
+        exit(1);
     }
 
-    if (seed == NULL) {
-        printf("entra if\n");
-        printLeaf(tree, tree->seed, tree->level);
-    } else {
-        printf("entra else\n");
-        tree->level--;
-        unsigned char *children = malloc(2 * tree->seedSize);
-        RNG(children, seed, tree); 
+    unsigned char children[2 * SEED_LENGTH];
+    RNG(children, seed);
+    unsigned char right[SEED_LENGTH];
+    rightSeed(right, children);
 
-        unsigned char *right = malloc(tree->seedSize);
-        rightSeed(children, right, tree);
-
-        printf("right lvl %d: ", tree->level);
-        // ----------
-        for (int i = 0; i < tree->seedSize; i++) {
-            printf("%02x", right[i]);
-        }
-        printf("\n");
-        // ----------        
-  
-        printLeaf(tree, right, tree->level+1);        
-
-        free(children);
-        free(right);
-        free(seed);
-    }
+    printLeaf(tree, right, currentLevel + 1);
 }
 
-int main() {
-    unsigned char initialSeed[] = {0x01, 0x02, 0x03, 0x04, 0x05}; // Array di 5 byte: ogni byte ha un valore esadecimale
+int main() // TODO DEBUG only, remove when ready
+{
+    unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
     int bitmaskExample[8] = {1, 0, 1, 0, 1, 1, 0, 1};
 
     TreeData tree;
-    tree = INIT(tree, initialSeed, sizeof(initialSeed), bitmaskExample, 8);
+    tree = INIT(initialSeed, bitmaskExample, 8);
 
     nextLeaf(&tree);
     nextLeaf(&tree);
@@ -179,7 +162,5 @@ int main() {
     nextLeaf(&tree);
     nextLeaf(&tree);
 
-
-    free(tree.seed);
     return 0;
 }
