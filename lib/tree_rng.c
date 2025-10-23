@@ -9,9 +9,12 @@ TreeData INIT(unsigned char *seed, int *bitmask, int bitmask_size)
     tree.seed = seed;
     tree.bitmask = bitmask;
     tree.bitmaskSize = bitmask_size;
+    tree.iterations = 0;
 
     return tree;
 }
+
+void nextLeaf(TreeData *tree);
 
 void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height)
 {
@@ -36,12 +39,24 @@ void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height)
         memcpy(currentSeed, left, SEED_LENGTH);
     }
 
-    // TODO i don't know if it should return the array instead
-    for (int i = 0; i < SEED_LENGTH; i++)
+    printf("iteration %d \n", tree->iterations);
+
+    if (tree->bitmask[tree->iterations] == 1)
     {
-        printf("%02x", currentSeed[i]);
+        // TODO i don't know if it should return the array instead
+        for (int i = 0; i < SEED_LENGTH; i++)
+        {
+            printf("%02x", currentSeed[i]);
+        }
+        printf("\n");
+
+        tree->iterations = (tree->iterations + 1) % tree->bitmaskSize;
     }
-    printf("\n");
+    else
+    {
+        tree->iterations = (tree->iterations + 1) % tree->bitmaskSize;
+        nextLeaf(tree);
+    }
 }
 
 void nextLeaf(TreeData *tree)
@@ -71,7 +86,7 @@ void nextLeaf(TreeData *tree)
     printLeaf(tree, right, currentLevel + 1);
 }
 
-int main() // TODO DEBUG only, remove when ready
+int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e)
 {
     unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
     int bitmaskExample[8] = {1, 0, 1, 0, 1, 1, 0, 1};

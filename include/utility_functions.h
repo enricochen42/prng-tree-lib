@@ -22,6 +22,7 @@ typedef struct
     unsigned char *seed;
     int *bitmask;
     int bitmaskSize;
+    unsigned int iterations;
 } TreeData;
 
 // debug, given the seed x returns [2x+1, 2x+2]
