@@ -2,7 +2,7 @@
 #include "fips202.h"
 #include "utility_functions.h"
 
-TreeData INIT(unsigned char *seed, int *bitmask, int bitmask_size)
+TreeData INIT(unsigned char *seed, uint8_t *bitmask, uint8_t bitmask_size)
 {
     TreeData tree;
     tree.stack.top = -1;
@@ -16,10 +16,10 @@ TreeData INIT(unsigned char *seed, int *bitmask, int bitmask_size)
 
 void nextLeaf(TreeData *tree);
 
-void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height)
+void printLeaf(TreeData *tree, const unsigned char *seed, uint8_t temp_height)
 {
-    int numLeafs = tree->bitmaskSize;
-    int height = (int)ceil(log2(numLeafs));
+    uint8_t numLeafs = tree->bitmaskSize;
+    uint8_t height = (uint8_t)ceil(log2(numLeafs));
 
     unsigned char currentSeed[SEED_LENGTH];
     memcpy(currentSeed, seed, SEED_LENGTH);
@@ -44,7 +44,7 @@ void printLeaf(TreeData *tree, const unsigned char *seed, int temp_height)
     if (tree->bitmask[tree->iterations] == 1)
     {
         // TODO i don't know if it should return the array instead
-        for (int i = 0; i < SEED_LENGTH; i++)
+        for (uint16_t i = 0; i < SEED_LENGTH; i++)
         {
             printf("%02x", currentSeed[i]);
         }
@@ -69,7 +69,7 @@ void nextLeaf(TreeData *tree)
     }
 
     // else, save the current level, remove the first element from the stack and call printLeaf on its right child
-    int currentLevel = tree->stack.levels[tree->stack.top];
+    uint8_t currentLevel = tree->stack.levels[tree->stack.top];
     unsigned char *seed = pop(&tree->stack);
 
     if (seed == NULL)
@@ -89,7 +89,7 @@ void nextLeaf(TreeData *tree)
 int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e)
 {
     unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
-    int bitmaskExample[8] = {1, 0, 1, 0, 1, 1, 0, 1};
+    uint8_t bitmaskExample[8] = {1, 0, 1, 0, 1, 1, 0, 1};
 
     TreeData tree;
     tree = INIT(initialSeed, bitmaskExample, 8);

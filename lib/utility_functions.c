@@ -3,7 +3,7 @@
 void stub_shake(unsigned char *out, const unsigned char *seed)
 {
     unsigned char output[2 * SEED_LENGTH];
-    for (int i = 0; i < SEED_LENGTH; i++)
+    for (uint16_t i = 0; i < SEED_LENGTH; i++)
     {
         output[i] = 2 * seed[i] + 1;
         output[i + SEED_LENGTH] = 2 * seed[i] + 2;
@@ -28,7 +28,7 @@ void rightSeed(unsigned char *output, const unsigned char *input)
     memcpy(output, input + SEED_LENGTH, SEED_LENGTH);
 }
 
-void push(SeedStack *s, const unsigned char *seed, const int seedLevel)
+void push(SeedStack *s, const unsigned char *seed, const uint8_t seedLevel)
 {
     s->top++;
     memcpy(s->data[s->top], seed, SEED_LENGTH);

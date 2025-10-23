@@ -1,3 +1,5 @@
 /CROSS-implementation/*
 /.vscode/*
+/build/*
+/bin/*
 .DS_STORE

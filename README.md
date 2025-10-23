@@ -19,6 +19,17 @@ The project was designed and built by **Emanuele Brotti** and **Enrico Chen**, u
 - **Build Tools:** GCC
 - **External Dependencies:** [CROSS Implementation](https://github.com/CROSS-signature/CROSS-implementation)
 
+## Configure, Build and Run the Project
+From the project root, run:
+```
+cmake -S . -B build
+cmake --build build
+```
+then, run the executable:  
+```
+./build/tree_rng
+```
+
 ## License
 This project is developed for educational purposes as part of the Software Engineering Project at Polytechnic of Milan.  
 All rights reserved © 2025 Emanuele Brotti & Enrico Chen.
