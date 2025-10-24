@@ -39,8 +39,6 @@ void printLeaf(TreeData *tree, const unsigned char *seed, uint8_t temp_height)
         memcpy(currentSeed, left, SEED_LENGTH);
     }
 
-    printf("iteration %d \n", tree->iterations);
-
     if (tree->bitmask[tree->iterations] == 1)
     {
         // TODO i don't know if it should return the array instead
@@ -86,7 +84,7 @@ void nextLeaf(TreeData *tree)
     printLeaf(tree, right, currentLevel + 1);
 }
 
-int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e)
+int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e, skipping masked seeds)
 {
     unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
     uint8_t bitmaskExample[8] = {1, 0, 1, 0, 1, 1, 0, 1};

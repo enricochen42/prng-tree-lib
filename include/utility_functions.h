@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define SEED_LENGTH 5
 #define TREE_LEVELS 4 // TODO change it to dinamic array
