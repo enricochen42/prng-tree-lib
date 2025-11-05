@@ -19,12 +19,11 @@ void nextLeaf(TreeData *tree);
 void printLeaf(TreeData *tree, const unsigned char *seed, uint8_t temp_height)
 {
     uint8_t numLeafs = tree->bitmaskSize;
-    uint8_t height = (uint8_t)ceil(log2(numLeafs));
 
     unsigned char currentSeed[SEED_LENGTH];
     memcpy(currentSeed, seed, SEED_LENGTH);
 
-    while (temp_height < height)
+    while (temp_height < TREE_LEVELS - 1)
     {
         push(&tree->stack, currentSeed, temp_height);
 
@@ -41,7 +40,6 @@ void printLeaf(TreeData *tree, const unsigned char *seed, uint8_t temp_height)
 
     if (tree->bitmask[tree->iterations] == 1)
     {
-        // TODO i don't know if it should return the array instead
         for (uint16_t i = 0; i < SEED_LENGTH; i++)
         {
             printf("%02x", currentSeed[i]);
