@@ -98,6 +98,18 @@ int main() // TODO DEBUG only, remove when ready (the example goes from 07070707
     nextLeaf(&tree);
     nextLeaf(&tree);
     nextLeaf(&tree);
+    printf("\n");
+    
+    uint8_t bits[TREE_LEVELS - 1];
+
+    printf("uintToBinary: ");
+    uintToBinary(bits, 7);
+
+    for (int i = 0; i < TREE_LEVELS - 1; i++) 
+    {
+        printf("%u", bits[i]);
+    }
+    printf("\nbinaryToUint: %u\n", binaryToUint(bits));
 
     return 0;
 }
