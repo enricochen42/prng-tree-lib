@@ -41,6 +41,6 @@ void rightSeed(unsigned char *output, const unsigned char *input);
 void push(SeedStack *s, const unsigned char *seed, const uint8_t seedLevel);
 unsigned char *pop(SeedStack *s);
 
-void uintToBinary(uint8_t *out, uint8_t n);
+void uintToBinary(uint8_t *out, unsigned int n);
 
-uint8_t binaryToUint(uint8_t *in);
+unsigned int binaryToUint(const uint8_t *in);

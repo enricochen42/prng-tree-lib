@@ -82,6 +82,68 @@ void nextLeaf(TreeData *tree)
     printLeaf(tree, right, currentLevel + 1);
 }
 
+void findLeaf(const unsigned char *seed, const uint8_t *position, unsigned int level, TreeData *tree)
+{
+    if (seed == NULL)
+    {
+        return;
+    }
+
+    if (level >= TREE_LEVELS - 1)
+    {
+        unsigned int index = binaryToUint(position);
+        if (tree->bitmask[index] == 1)
+        {
+            for (uint16_t i = 0; i < SEED_LENGTH; i++)
+            {
+                printf("%02x", seed[i]);
+            }
+            printf("\n");
+        }
+        else
+        {
+            printf("X\n");
+        }
+
+        return;
+    }
+
+    if (position[level] == 0)
+    {
+        unsigned char children[2 * SEED_LENGTH];
+        RNG(children, seed);
+
+        unsigned char next[SEED_LENGTH];
+        leftSeed(next, children);
+
+        findLeaf(next, position, level + 1, tree);
+    }
+    else
+    {
+        unsigned char children[2 * SEED_LENGTH];
+        RNG(children, seed);
+
+        unsigned char next[SEED_LENGTH];
+        rightSeed(next, children);
+
+        findLeaf(next, position, level + 1, tree);
+    }
+}
+
+void selectLeaf(TreeData *tree, int index)
+{
+    if (tree->bitmaskSize <= index)
+    {
+        printf("ERROR: Index %d is out of range", index);
+        exit(1);
+    }
+
+    uint8_t position[TREE_LEVELS];
+    uintToBinary(position, index);
+    // TODO logic for imperfect trees
+    findLeaf(tree->seed, position, 0, tree);
+}
+
 int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e, skipping masked seeds)
 {
     unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
@@ -99,17 +161,29 @@ int main() // TODO DEBUG only, remove when ready (the example goes from 07070707
     nextLeaf(&tree);
     nextLeaf(&tree);
     printf("\n");
-    
+
     uint8_t bits[TREE_LEVELS - 1];
 
     printf("uintToBinary: ");
-    uintToBinary(bits, 7);
+    uintToBinary(bits, 3);
 
-    for (int i = 0; i < TREE_LEVELS - 1; i++) 
+    for (int i = 0; i < TREE_LEVELS - 1; i++)
     {
         printf("%u", bits[i]);
     }
     printf("\nbinaryToUint: %u\n", binaryToUint(bits));
+
+    printf("\n testing direct access:\n");
+    selectLeaf(&tree, 0);
+    selectLeaf(&tree, 1);
+    selectLeaf(&tree, 2);
+    selectLeaf(&tree, 3);
+    selectLeaf(&tree, 4);
+    selectLeaf(&tree, 5);
+    selectLeaf(&tree, 6);
+    selectLeaf(&tree, 7);
+    printf("\n nextleaf:");
+    nextLeaf(&tree);
 
     return 0;
 }
