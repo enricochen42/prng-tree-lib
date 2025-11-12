@@ -28,6 +28,9 @@ typedef struct
 
 // [FUNCTIONS]:
 
+// debug, given the seed x returns [2x+1, 2x+2]
+void stub_shake(unsigned char *out, const unsigned char *seed);
+
 // returns a seed with double the size of the parent seed
 void RNG(unsigned char *out, const unsigned char *seed);
 
