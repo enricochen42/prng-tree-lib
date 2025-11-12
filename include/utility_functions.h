@@ -6,7 +6,7 @@
 #define SEED_LENGTH 5
 #define TREE_LEVELS 4
 
-// [DATA STRUCTURES]
+// [DATA STRUCTURES]:
 
 // saves the tree path across different function calls
 typedef struct
@@ -26,8 +26,7 @@ typedef struct
     uint8_t iterations;
 } TreeData;
 
-// debug, given the seed x returns [2x+1, 2x+2]
-void stub_shake(unsigned char *out, const unsigned char *seed);
+// [FUNCTIONS]:
 
 // returns a seed with double the size of the parent seed
 void RNG(unsigned char *out, const unsigned char *seed);

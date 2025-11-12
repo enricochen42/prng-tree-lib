@@ -132,7 +132,7 @@ void findLeaf(const unsigned char *seed, const uint8_t *position, unsigned int l
 
 void selectLeaf(TreeData *tree, int index)
 {
-    if (tree->bitmaskSize <= index)
+    if (index < 0 || tree->bitmaskSize <= index)
     {
         printf("ERROR: Index %d is out of range", index);
         exit(1);
