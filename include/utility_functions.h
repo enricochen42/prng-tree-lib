@@ -12,32 +12,37 @@
 typedef struct
 {
     unsigned char data[TREE_LEVELS][SEED_LENGTH]; // array of seeds
-    uint8_t levels[TREE_LEVELS];                  // array of levels, to memorize the seed's height
-    int16_t top;
+    unsigned int levels[TREE_LEVELS];             // array of levels, to memorize the seed's height
+    int top;                                      // -1 when negative //TODO use positive only if possible
 } SeedStack;
 
 // saves the tree state across different function calls
 typedef struct
 {
     SeedStack stack;
-    unsigned char *seed;
+    unsigned char *root;
     uint8_t *bitmask;
-    uint8_t bitmaskSize;
-    uint8_t iterations;
+    unsigned int bitmaskSize; // number of leaves
+
+    unsigned int *leftSubTreeLevels; // the number of elements in the array is the number of rightmost nodes. Each element contains the height of its left subtree
+    unsigned int leftSubTreeLevelsSize;
+    unsigned int iterations;
+    unsigned int currentRightMostNode;
+    unsigned int subTreeLevel;
 } TreeData;
 
 // [FUNCTIONS]:
 
 // debug, given the seed x returns [2x+1, 2x+2]
-void stub_shake(unsigned char *out, const unsigned char *seed);
+void shakeStub(unsigned char *out, const unsigned char *seed);
 
 // returns a seed with double the size of the parent seed
 void RNG(unsigned char *out, const unsigned char *seed);
 
-// copies the left half of the parent seed
+void printSeed(const unsigned char *seed, unsigned int index, TreeData *tree);
+
 void leftSeed(unsigned char *output, const unsigned char *input);
 
-// copies the second half of the parent seed
 void rightSeed(unsigned char *output, const unsigned char *input);
 
 void push(SeedStack *s, const unsigned char *seed, const uint8_t seedLevel);
