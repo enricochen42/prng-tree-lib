@@ -84,20 +84,35 @@ void nextLeaf(TreeData *tree)
     if (tree->stack.size <= 0)
     {
         tree->currentRightMostNode = 0;
-        tree->subTreeLevel = tree->leftSubTreeLevels[0] + 1;
-        nextLeafAux(tree, tree->root, 0);
-        return;
+        if (tree->leftSubTreeLevels[0] != 0)
+        {
+            tree->subTreeLevel = tree->leftSubTreeLevels[0] + 1;
+            nextLeafAux(tree, tree->root, 0);
+            return;
+        }
+        else
+        {
+            if (tree->leftSubTreeLevelsSize > 1)
+            { // root has a right child, continue as if we visited all the left nodes
+                push(&tree->stack, tree->root, 0);
+            }
+            else
+            {
+                printSeed(tree->root, 0, tree);
+                return;
+            }
+        }
     }
 
     // else, remove the first element from the stack and call nextLeafAux on its right child
 
-    uint8_t currentLevel = tree->stack.levels[tree->stack.size - 1];
+    unsigned int currentLevel = tree->stack.levels[tree->stack.size - 1];
     unsigned char *seed = pop(&tree->stack);
 
     if (tree->stack.size <= 0) // we removed one of the rightmost nodes (used for unbalanced trees)
     {
 
-        if (tree->currentRightMostNode + 1 >= tree->leftSubTreeLevelsSize)
+        if (tree->currentRightMostNode >= tree->leftSubTreeLevelsSize - 1)
         { // last rightmost node
             if (tree->leftSubTreeLevels[tree->currentRightMostNode] == 0)
             { // no left children and no right children -> it's a leaf
@@ -112,9 +127,10 @@ void nextLeaf(TreeData *tree)
                     tree->iterations = (tree->iterations + 1) % tree->bitmaskSize;
                     nextLeaf(tree);
                 }
+                return;
             }
 
-            nextLeaf(tree);
+            nextLeaf(tree); // no more nodes left: recall the function from root
             return;
         }
 
@@ -243,11 +259,11 @@ void findLeaf(TreeData *tree, unsigned int index)
 int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e, skipping masked seeds)
 {
     unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
-    uint8_t bitmaskExample[6] = {0, 1, 0, 1, 0, 1}; // 6 leaves
-    unsigned int leftTreeExample[3] = {3, 1, 1};    // 4 level tree missing the 5°, 6° and 8° leaf
+    uint8_t bitmaskExample[7] = {1, 1, 1, 1, 1, 1, 1};
+    unsigned int leftTreeExample[3] = {3, 1, 2};
 
     TreeData tree;
-    tree = INIT(initialSeed, bitmaskExample, 6, leftTreeExample, 3);
+    tree = INIT(initialSeed, bitmaskExample, 7, leftTreeExample, 3);
 
     nextLeaf(&tree);
     nextLeaf(&tree);
@@ -259,20 +275,6 @@ int main() // TODO DEBUG only, remove when ready (the example goes from 07070707
     nextLeaf(&tree);
     nextLeaf(&tree);
     nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    printf("\n");
-
-    uint8_t bits[3];
-
-    printf("uintToBinary: ");
-    uintToBinary(bits, 3, 3);
-
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%u", bits[i]);
-    }
-    printf("\nbinaryToUint: %u\n", binaryToUint(bits, 3));
 
     printf("\n testing direct access:\n");
     findLeaf(&tree, 0);
@@ -281,8 +283,7 @@ int main() // TODO DEBUG only, remove when ready (the example goes from 07070707
     findLeaf(&tree, 3);
     findLeaf(&tree, 4);
     findLeaf(&tree, 5);
-    printf("\n nextleaf:");
-    nextLeaf(&tree);
+    findLeaf(&tree, 6);
 
     return 0;
 }

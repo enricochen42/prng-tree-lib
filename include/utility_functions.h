@@ -4,15 +4,16 @@
 #include <stdint.h>
 
 #define SEED_LENGTH 5
+#define MAX_LEVEL 400
 
 // [DATA STRUCTURES]:
 
 // saves the tree path across different function calls
-#define MAX_LEVELS 4 // TODO remove it
+
 typedef struct
 {
-    unsigned char data[MAX_LEVELS][SEED_LENGTH]; // array of seeds //TODO could be created depending on current subtree, every time the stack is empty
-    unsigned int levels[MAX_LEVELS];             // array of levels, to memorize the seed's height
+    unsigned char data[MAX_LEVEL][SEED_LENGTH]; // array of seeds
+    unsigned int levels[MAX_LEVEL];             // array of levels, to memorize the seed's height
     unsigned int size;
 } SeedStack;
 
