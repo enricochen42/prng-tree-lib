@@ -47,32 +47,34 @@ void rightSeed(unsigned char *output, const unsigned char *input)
 
 void push(SeedStack *s, const unsigned char *seed, const uint8_t seedLevel)
 {
-    s->top++;
-    memcpy(s->data[s->top], seed, SEED_LENGTH);
-    s->levels[s->top] = seedLevel;
+    s->size++;
+    memcpy(s->data[s->size - 1], seed, SEED_LENGTH);
+    s->levels[s->size - 1] = seedLevel;
 }
 
 unsigned char *pop(SeedStack *s)
 {
-    if (s->top == -1)
+    if (s->size == 0)
+    {
         return NULL;
-    s->top--;
-    return s->data[s->top + 1];
+    }
+    s->size--;
+    return s->data[s->size];
 }
 
-void uintToBinary(uint8_t *out, unsigned int n)
+void uintToBinary(uint8_t *out, unsigned int size, unsigned int n)
 {
-    for (uint8_t i = TREE_LEVELS - 1; i > 0; i--)
+    for (uint8_t i = size - 1; i > 0; i--)
     {
         out[i - 1] = n & 1; // & (AND bitwise) confonts the least significant bit of n with 1 and returns the boolean result
         n = n >> 1;         // >> (right shift) shifts all bits of n to the right by 1 position
     }
 }
 
-unsigned int binaryToUint(const uint8_t *in)
+unsigned int binaryToUint(const uint8_t *in, unsigned int size)
 {
     unsigned int res = 0;
-    for (uint8_t i = 0; i < TREE_LEVELS - 1; i++)
+    for (uint8_t i = 0; i < size - 1; i++)
     {
         // << (left shift) shifts all bits of res to the left by 1 position
         // | (OR bitwise) confronts the least significant bit of res with in[i] and returns the boolean result

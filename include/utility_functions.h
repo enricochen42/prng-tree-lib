@@ -4,16 +4,16 @@
 #include <stdint.h>
 
 #define SEED_LENGTH 5
-#define TREE_LEVELS 4
 
 // [DATA STRUCTURES]:
 
 // saves the tree path across different function calls
+#define MAX_LEVELS 4 // TODO remove it
 typedef struct
 {
-    unsigned char data[TREE_LEVELS][SEED_LENGTH]; // array of seeds
-    unsigned int levels[TREE_LEVELS];             // array of levels, to memorize the seed's height
-    int top;                                      // -1 when negative //TODO use positive only if possible
+    unsigned char data[MAX_LEVELS][SEED_LENGTH]; // array of seeds //TODO could be created depending on current subtree, every time the stack is empty
+    unsigned int levels[MAX_LEVELS];             // array of levels, to memorize the seed's height
+    unsigned int size;
 } SeedStack;
 
 // saves the tree state across different function calls
@@ -48,6 +48,6 @@ void rightSeed(unsigned char *output, const unsigned char *input);
 void push(SeedStack *s, const unsigned char *seed, const uint8_t seedLevel);
 unsigned char *pop(SeedStack *s);
 
-void uintToBinary(uint8_t *out, unsigned int n);
+void uintToBinary(uint8_t *out, unsigned int size, unsigned int n);
 
-unsigned int binaryToUint(const uint8_t *in);
+unsigned int binaryToUint(const uint8_t *in, unsigned int size);
