@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
+#include "fips202.h"
 
 #define SEED_LENGTH 5
 #define MAX_LEVEL 400

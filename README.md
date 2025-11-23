@@ -19,15 +19,15 @@ The project was designed and built by **Emanuele Brotti** and **Enrico Chen**, u
 - **Build Tools:** GCC
 - **External Dependencies:** [CROSS Implementation](https://github.com/CROSS-signature/CROSS-implementation)
 
-## Configure, Build and Run the Project
+## Configure, Build and Run the Tests File Project
 From the project root, run:
 ```
 cmake -S . -B build
 cmake --build build
 ```
-then, run the executable:  
+then, run the executable tests file:  
 ```
-./build/tree_rng
+./build/tests/testsPRNGTreeC
 ```
 
 ## License

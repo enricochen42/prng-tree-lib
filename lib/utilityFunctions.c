@@ -1,5 +1,4 @@
-#include "utility_functions.h"
-#include "fips202.h"
+#include "utilityFunctions.h"
 
 void shakeStub(unsigned char *out, const unsigned char *seed)
 {
@@ -15,8 +14,8 @@ void shakeStub(unsigned char *out, const unsigned char *seed)
 
 void RNG(unsigned char *out, const unsigned char *seed)
 {
-    shakeStub(out, seed);
-    // shake256(out, 2 * SEED_LENGTH, seed, SEED_LENGTH);
+    // shakeStub(out, seed); uncomment for testing purposes and comment shake256 line
+    shake256(out, 2 * SEED_LENGTH, seed, SEED_LENGTH);
 }
 
 void printSeed(const unsigned char *seed, unsigned int index, TreeData *tree)

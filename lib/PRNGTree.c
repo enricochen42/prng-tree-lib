@@ -1,6 +1,4 @@
-#include <math.h>
-#include "fips202.h"
-#include "utility_functions.h"
+#include "PRNGTree.h"
 
 void validateBitmask(uint8_t *bitmask, unsigned int bitmaskSize)
 {
@@ -254,36 +252,4 @@ void findLeaf(TreeData *tree, unsigned int index)
     }
 
     selectSubTree(tree->root, 0, index, index, tree);
-}
-
-int main() // TODO DEBUG only, remove when ready (the example goes from 0707070707 to 0e0e0e0e0e, skipping masked seeds)
-{
-    unsigned char initialSeed[] = {0x00, 0x00, 0x00, 0x00, 0x00};
-    uint8_t bitmaskExample[7] = {1, 1, 1, 1, 1, 1, 1};
-    unsigned int leftTreeExample[3] = {3, 1, 2};
-
-    TreeData tree;
-    tree = INIT(initialSeed, bitmaskExample, 7, leftTreeExample, 3);
-
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-    nextLeaf(&tree);
-
-    printf("\n testing direct access:\n");
-    findLeaf(&tree, 0);
-    findLeaf(&tree, 1);
-    findLeaf(&tree, 2);
-    findLeaf(&tree, 3);
-    findLeaf(&tree, 4);
-    findLeaf(&tree, 5);
-    findLeaf(&tree, 6);
-
-    return 0;
 }
