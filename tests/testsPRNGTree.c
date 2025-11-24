@@ -28,7 +28,7 @@ void testSingleNodeTree() {
     printf("> findLeaf(): ");
     findLeaf(&tree, 0);
 
-    printf("OK -> testSingleNodeTree passed.\n\n");
+    printf("OK -> testSingleNodeTree executed.\n\n");
 }
 
 void testPerfectTree() {
@@ -54,7 +54,7 @@ void testPerfectTree() {
         findLeaf(&tree, i);
     }
     
-    printf("OK -> testPerfectTree passed.\n\n");
+    printf("OK -> testPerfectTree executed.\n\n");
 }
 
 void testLargePerfectTree() {
@@ -85,7 +85,7 @@ void testLargePerfectTree() {
         findLeaf(&tree, i);
     }
     
-    printf("OK -> testLargePerfectTree passed.\n\n");
+    printf("OK -> testLargePerfectTree executed.\n\n");
 }
 
 void testImperfectTree1() {
@@ -111,7 +111,7 @@ void testImperfectTree1() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testImperfectTree1 passed.\n\n");
+    printf("OK -> testImperfectTree1 executed.\n\n");
 }
 
 void testImperfectTree2() {
@@ -137,7 +137,7 @@ void testImperfectTree2() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testImperfectTree2 passed.\n\n");
+    printf("OK -> testImperfectTree2 executed.\n\n");
 }
 
 void testLargeImperfectTree() {
@@ -175,7 +175,7 @@ void testLargeImperfectTree() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testLargeImperfectTree passed.\n\n");
+    printf("OK -> testLargeImperfectTree executed.\n\n");
 }
 
 void testNoRightSubTreeOfRoot() {
@@ -201,7 +201,7 @@ void testNoRightSubTreeOfRoot() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testNoRightSubTreeOfRoot passed.\n\n");
+    printf("OK -> testNoRightSubTreeOfRoot executed.\n\n");
 }
 
 void testBitmaskTree() {
@@ -232,7 +232,7 @@ void testBitmaskTree() {
         findLeaf(&tree, i);
     }
     
-    printf("OK -> testBitmaskTree passed.\n\n");
+    printf("OK -> testBitmaskTree executed.\n\n");
 }
 
 void testBitmaskTreeAlmostAllZeros() {
@@ -261,16 +261,17 @@ void testBitmaskTreeAlmostAllZeros() {
         findLeaf(&tree, i);
     }
     
-    printf("OK -> testBitmaskTreeAlmostAllZeros passed.\n\n");
+    printf("OK -> testBitmaskTreeAlmostAllZeros executed.\n\n");
 }
 
 int main() {
+    printf("WARNING: these tests do not perform automatic checks: please verify the printed output manually!\n");
     printf("Starting Tree Tests...\n");
     printf("Initial Seed Root: ");
     for(int i = 0; i < SEED_LENGTH; i++) {
         printf("%02x", root[i]);
     }
-    printf("\n\n");
+    printf("\n\ns");
     
     // uncomment the following lines to run large tree tests:
     // testLargePerfectTree();
@@ -284,6 +285,6 @@ int main() {
     testBitmaskTree();
     testBitmaskTreeAlmostAllZeros();
 
-    printf("All tests completed.\n");
+    printf("All tests executed.\n");
     return 0;
 }

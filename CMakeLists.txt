@@ -7,4 +7,5 @@ set(CMAKE_C_STANDARD 11)
 add_subdirectory(lib)
 
 # include the tests directory
-add_subdirectory(tests) # Comment this line to disable tests
+# uncomment the line below to enable tests
+#add_subdirectory(tests) # after compilation: from the project root, run tests with: ./build/tests/testsPRNGTreeC 
