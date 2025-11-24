@@ -21,45 +21,47 @@ The project was designed and built by **Emanuele Brotti** and **Enrico Chen**, u
 - **Build Tools:** GCC, CMake
 - **External Dependencies:** [CROSS Implementation](https://github.com/CROSS-signature/CROSS-implementation)
 
-## Importing This Library Into Your CMake Project
-To include this library in your own C project using CMake, follow these steps:
+## Importing This Library in your own C project using CMake
+From the directory containing your main <code>CMakeLists.txt</code>, run: <br>
+<code> git clone https://github.com/enricochen42/software-engineering-project.git </code> <br>
+
+Inside your main <code> CMakeLists.txt</code>:
 <ol>
-    <li> Clone the repository folder inside your project directory (for example next to your main <code>CMakeLists.txt</code>). </li>
-    <li> Include the library using <code>add_subdirectory()</code> in your main <code>CMakeLists.txt</code>. </li>
-    <li> Link the library target <code>PRNGTreeLib</code> to your executable. </li>
+    <li> Include the library, using <code>add_subdirectory()</code>.
+    <li> Link the library target <code>PRNGTreeLib</code> to your executable, using <code>target_link_libraries()</code>. </li>
     <li> <em>(Optional)</em> Enable debugging tools such as AddressSanitizer. </li>
 </ol>
 
-Below is an example `CMakeLists.txt` configuration:
+Below is a template for your `CMakeLists.txt` configuration:
 ```
 cmake_minimum_required(VERSION 3.10)
-project(UserProject)
+project(nameProject)
 
 # use C11
 set(CMAKE_C_STANDARD 11)
 
-# include the software-engineering-project subdirectory
+# include the library subdirectory
 add_subdirectory(software-engineering-project)
 
 # create the executable
-add_executable(UserProgram test.c)
+add_executable(nameProgram nameFile.c)
 
 # link the PRNGTreeLib library
-target_link_libraries(UserProgram PRIVATE PRNGTreeLib)
+target_link_libraries(nameProgram PRIVATE PRNGTreeLib)
 
-# Enable AddressSanitizer for debugging
-target_compile_options(UserProgram PRIVATE -fsanitize=address -g)
-target_link_options(UserProgram PRIVATE -fsanitize=address)
+# (optional) enable AddressSanitizer for debugging
+target_compile_options(nameProgram PRIVATE -fsanitize=address -g)
+target_link_options(nameProgram PRIVATE -fsanitize=address)
 ```
 
-After configuring CMake, from the project root, build with:
+After configuring CMake, build the project from your main <code>CMakeLists.txt</code> directory, using:
 ```
 cmake -S . -B build
 ```
-then, compile and run with:
+Then, compile and run with:
 ```
 cmake --build build
-./build/UserProgram
+./build/nameProgram
 ```
 
 ## License

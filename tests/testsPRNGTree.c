@@ -109,8 +109,8 @@ void testStrangeImperfectTree() {
     printf("OK -> testStrangeImperfectTree executed.\n\n");
 }
 
-void testNoRightSubTreeOfRoot() {
-    printf("Running testNoRightSubTreeOfRoot...\n");
+void testOnlyLeftSubTreeOfRoot() {
+    printf("Running testOnlyLeftSubTreeOfRoot...\n");
 
     unsigned int bitmaskSize = 8;
     uint8_t bitmask[bitmaskSize]; 
@@ -120,7 +120,7 @@ void testNoRightSubTreeOfRoot() {
         bitmask[i] = 1;
     }
 
-    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 4);
+    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 1);
 
     printf("> nextLeaf():\n");
     for(int i = 0; i < bitmaskSize; i++) {
@@ -132,7 +132,59 @@ void testNoRightSubTreeOfRoot() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testNoRightSubTreeOfRoot executed.\n\n");
+    printf("OK -> testOnlyLeftSubTreeOfRoot executed.\n\n");
+}
+
+void testOnlyRightSubTreeOfRoot() {
+    printf("Running testOnlyRightSubTreeOfRoot...\n");
+
+    unsigned int bitmaskSize = 8;
+    uint8_t bitmask[bitmaskSize]; 
+    unsigned int leftTreeLevels[5] = {0, 3, 2 , 1, 0};
+
+    for(int i = 0; i < bitmaskSize; i++) {
+        bitmask[i] = 1;
+    }
+
+    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 5);
+
+    printf("> nextLeaf():\n");
+    for(int i = 0; i < bitmaskSize; i++) {
+        nextLeaf(&tree);
+    }
+
+    printf("> findLeaf():\n");
+    for(int i = 0; i < bitmaskSize; i++) {   
+        findLeaf(&tree, i);
+    }
+
+    printf("OK -> testOnlyRightSubTreeOfRoot executed.\n\n");
+}
+
+void testLastRightmostNodeWithLeftSubTree() {
+    printf("Running testLastRightmostNodeWithLeftSubTree...\n");
+
+    unsigned int bitmaskSize = 6;
+    uint8_t bitmask[bitmaskSize]; 
+    unsigned int leftTreeLevels[2] = {2, 3};
+
+    for(int i = 0; i < bitmaskSize; i++) {
+        bitmask[i] = 1;
+    }
+
+    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 2);
+
+    printf("> nextLeaf():\n");
+    for(int i = 0; i < bitmaskSize; i++) {
+        nextLeaf(&tree);
+    }
+
+    printf("> findLeaf():\n");
+    for(int i = 0; i < bitmaskSize; i++) {   
+        findLeaf(&tree, i);
+    }
+
+    printf("OK -> testLastRightmostNodeWithLeftSubTree executed.\n\n");    
 }
 
 void testBitmaskTree() {
@@ -208,7 +260,9 @@ int main() {
     testPerfectTree();
     testImperfectTree();
     testStrangeImperfectTree();
-    testNoRightSubTreeOfRoot();
+    testOnlyLeftSubTreeOfRoot();
+    testOnlyRightSubTreeOfRoot();
+    testLastRightmostNodeWithLeftSubTree();
     testBitmaskTree();
     testBitmaskTreeAlmostAllZeros();
 
