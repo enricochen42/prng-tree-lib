@@ -14,7 +14,7 @@ void shakeStub(unsigned char *out, const unsigned char *seed)
 
 void RNG(unsigned char *out, const unsigned char *seed)
 {
-    // shakeStub(out, seed); uncomment for testing purposes and comment shake256 line
+    // shakeStub(out, seed); //uncomment for testing purposes and comment shake256 line
     shake256(out, 2 * SEED_LENGTH, seed, SEED_LENGTH);
 }
 

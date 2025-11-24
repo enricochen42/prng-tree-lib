@@ -57,39 +57,8 @@ void testPerfectTree() {
     printf("OK -> testPerfectTree executed.\n\n");
 }
 
-void testLargePerfectTree() {
-    printf("Running testLargePerfectTree...\n");
-
-    unsigned int bitmaskSize = 2048;
-    uint8_t bitmask[bitmaskSize]; 
-    unsigned int height = ceil(log2(bitmaskSize)) + 1;
-    unsigned int leftTreeLevels[height];
-
-    for(int i = 0; i < height; i++) {
-        leftTreeLevels[i] = height - i;
-    } 
-
-    for(int i = 0; i < bitmaskSize; i++) {
-        bitmask[i] = 1;
-    }
-
-    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, height);
-
-    printf("> nextLeaf():\n");
-    for(int i = 0; i < bitmaskSize; i++) {
-        nextLeaf(&tree);
-    }
-
-    printf("> findLeaf():\n");
-    for(int i = 0; i < bitmaskSize; i++) {   
-        findLeaf(&tree, i);
-    }
-    
-    printf("OK -> testLargePerfectTree executed.\n\n");
-}
-
-void testImperfectTree1() {
-    printf("Running testImperfectTree1...\n");
+void testImperfectTree() {
+    printf("Running testImperfectTree...\n");
 
     unsigned int bitmaskSize = 14;
     uint8_t bitmask[bitmaskSize]; 
@@ -111,21 +80,21 @@ void testImperfectTree1() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testImperfectTree1 executed.\n\n");
+    printf("OK -> testImperfectTree executed.\n\n");
 }
 
-void testImperfectTree2() {
-    printf("Running testImperfectTree2...\n");
+void testStrangeImperfectTree() {
+    printf("Running testStrangeImperfectTree...\n");
 
-    unsigned int bitmaskSize = 9;
+    unsigned int bitmaskSize = 12;
     uint8_t bitmask[bitmaskSize]; 
-    unsigned int leftTreeLevels[2] = {4, 0};
+    unsigned int leftTreeLevels[8] = {3, 0, 1, 3, 0, 2, 0, 0};
 
     for(int i = 0; i < bitmaskSize; i++) {
         bitmask[i] = 1;
     }
 
-    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 2);
+    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, 8);
 
     printf("> nextLeaf():\n");
     for(int i = 0; i < bitmaskSize; i++) {
@@ -137,45 +106,7 @@ void testImperfectTree2() {
         findLeaf(&tree, i);
     }
 
-    printf("OK -> testImperfectTree2 executed.\n\n");
-}
-
-void testLargeImperfectTree() {
-    printf("Running testLargeImperfectTree...\n");
-
-    unsigned int bitmaskSize = 2046;
-    uint8_t bitmask[bitmaskSize]; 
-    unsigned int height = ceil(log2(bitmaskSize));
-    unsigned int leftTreeLevels[height];
-    
-    for(int i = 0; i < height; i++) {
-        if(i == height - 2) {
-            leftTreeLevels[i] = 1;
-        }
-        if(i == height - 1) {
-            leftTreeLevels[i] = 0;
-        } else {
-            leftTreeLevels[i] = height - i;
-        }
-    } 
-
-    for(int i = 0; i < bitmaskSize; i++) {
-        bitmask[i] = 1;
-    }
-
-    TreeData tree = INIT(root, bitmask, bitmaskSize, leftTreeLevels, height);
-
-    printf("> nextLeaf():\n");
-    for(int i = 0; i < bitmaskSize; i++) {
-        nextLeaf(&tree);
-    }
-
-    printf("> findLeaf():\n");
-    for(int i = 0; i < bitmaskSize; i++) {   
-        findLeaf(&tree, i);
-    }
-
-    printf("OK -> testLargeImperfectTree executed.\n\n");
+    printf("OK -> testStrangeImperfectTree executed.\n\n");
 }
 
 void testNoRightSubTreeOfRoot() {
@@ -271,16 +202,12 @@ int main() {
     for(int i = 0; i < SEED_LENGTH; i++) {
         printf("%02x", root[i]);
     }
-    printf("\n\ns");
-    
-    // uncomment the following lines to run large tree tests:
-    // testLargePerfectTree();
-    // testLargeImperfectTree();
+    printf("\n\n");
     
     testSingleNodeTree();
     testPerfectTree();
-    testImperfectTree1();
-    testImperfectTree2();
+    testImperfectTree();
+    testStrangeImperfectTree();
     testNoRightSubTreeOfRoot();
     testBitmaskTree();
     testBitmaskTreeAlmostAllZeros();
