@@ -1,4 +1,4 @@
-# Software Engineering Project 2025–2026  
+# Computer Engineering Project 2024–2025  
 **University:** [Polytechnic of Milan](https://www.polimi.it/en)  
 **Authors:** [Emanuele Brotti](mailto:emanuele.brotti@polimi.it), [Enrico Chen](mailto:enrico.chen@polimi.it)  
 **Professor Supervisor:** [Alessandro Barenghi](https://barenghi.faculty.polimi.it/doku.php)  
@@ -6,24 +6,26 @@
 ## Project Overview
 This repository contains a C library implementing a PRNG‑based binary tree data structure designed for experimentation, educational purposes and testing. The library provides utilities for building, manipulating and traversing pseudo‑randomly generated trees, enabling deterministic reproducibility through fixed seeds. It is intended to be lightweight, portable and easily integrable into other C projects.
 
-The project was developed as part of the *Software Engineering project* (Academic Year 2025–2026) at the **Polytechnic of Milan**.  
+The project was developed as part of the *Computer Engineering Project* (Academic Year 2024–2025) at the **Polytechnic of Milan**.  
 The project was designed and built by **Emanuele Brotti** and **Enrico Chen**, under the academic supervision of **Prof. Alessandro Barenghi**.
+
+**Documentation**: [PRNGTreeLibraryDoc.pdf](docs/PRNGTreeLibraryDoc.pdf)
 
 ## Course Information
 - **Name:** PROGETTO DI INGEGNERIA INFORMATICA (5 CFU)  
 - **Identification Code:** 089020
-- **Degree:** BSc in Software Engineering  
+- **Degree:** BSc in Computer Engineering  
 - **Institution:** Polytechnic of Milan, DEIB  
-- **Academic Year:** 2025–2026
+- **Academic Year:** 2024–2025
 
 ## Technical Stack
 - **Language:** C
-- **Build Tools:** GCC, CMake
+- **Build Tools:** CLang, CMake
 - **External Dependencies:** [CROSS Implementation](https://github.com/CROSS-signature/CROSS-implementation)
 
 ## Importing This Library in your own C project using CMake
 From the directory containing your main <code>CMakeLists.txt</code>, run: <br>
-<code> git clone https://github.com/enricochen42/software-engineering-project.git </code> <br>
+<code> git clone https://github.com/enricochen42/prng-tree-lib.git </code> <br>
 
 Inside your main <code> CMakeLists.txt</code>:
 <ol>
@@ -41,7 +43,7 @@ project(nameProject)
 set(CMAKE_C_STANDARD 11)
 
 # include the library subdirectory
-add_subdirectory(software-engineering-project)
+add_subdirectory(prng-tree-lib)
 
 # create the executable
 add_executable(nameProgram nameFile.c)
